@@ -50,4 +50,4 @@ or any derivative works without explicit written permission from the author.
 ## Author
 Made by **Adko5558 Services!**
 
-Homepage: http://87.197.121.207:5558
+Homepage: http://87.197.121.207:5558 (sowwie, it sometimes offline because there is also a Minecraft Server on it xd, but will move to another port soon :D)
