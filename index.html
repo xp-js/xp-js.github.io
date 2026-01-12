@@ -2,34 +2,21 @@
 <html lang="sk">
 <head>
 <meta charset="UTF-8">
-<title>Windows XP Professional</title>
+<title>Windows XP Professional - Fixed</title>
 <link rel="stylesheet" href="https://unpkg.com/xp.css">
 
 <style>
   :root { --taskbar-height: 30px; }
 
-  /* FIX KURZORA: Použitie transform pre nulové oneskorenie */
   * { 
     user-select: none !important; 
-    -webkit-user-drag: none !important; 
-    cursor: none !important; 
-  }
-  
-  #custom-cursor {
-    position: fixed;
-    top: 0; left: 0;
-    width: 32px; height: 32px;
-    background: url('./img/Cursor Basic.png') no-repeat;
-    background-size: contain;
-    pointer-events: none;
-    z-index: 100000;
-    will-change: transform;
-    display: none; /* Skrytý počas startupu */
+    -webkit-user-drag: none !important;
   }
 
-  .pointer-cursor #custom-cursor { background-image: url('./img/Cursor Hand.png'); }
-
-  body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: #000; font-family: Tahoma, sans-serif; }
+  body, html { 
+    margin: 0; padding: 0; width: 100%; height: 100%; 
+    overflow: hidden; background: #000; font-family: Tahoma, sans-serif;
+  }
 
   /* STARTUP */
   #startup {
@@ -44,8 +31,8 @@
     position: relative;
   }
 
-  /* ICONS */
-  #icons { position: absolute; top: 20px; left: 20px; display: flex; flex-direction: column; gap: 15px; }
+  /* IKONY A OZNACENIE */
+  #icons { position: absolute; top: 20px; left: 20px; display: flex; flex-direction: column; gap: 15px; z-index: 5; }
   .desktop-icon {
     width: 85px; text-align: center; color: white; font-size: 11px;
     text-shadow: 1px 1px 2px #000; padding: 5px; border: 1px solid transparent;
@@ -54,109 +41,72 @@
   .desktop-icon img { width: 32px; height: 32px; display: block; margin: 0 auto 5px; }
   .big-icon img { width: 48px !important; height: 48px !important; }
 
-  /* WINDOWS & FOCUS */
-  .window { position: absolute; width: 500px; z-index: 500; }
-  .window.active { z-index: 1000 !important; }
-  .window.inactive .title-bar { background: linear-gradient(to bottom, #7697e7 0%, #7e9ee9 100%) !important; }
-  .window.inactive .title-bar-text { color: #d6e5ff !important; }
-  .window.inactive .title-bar-controls button { filter: grayscale(1) opacity(0.6); }
-  
-  .window.maximized { 
-    width: 100% !important; height: 100% !important; 
-    top: 0 !important; left: 0 !important; 
+  #selection-box {
+    position: absolute; border: 1px dotted #fff; background: rgba(255,255,255,0.2);
+    pointer-events: none; display: none; z-index: 1000;
   }
 
-  /* START MENU FIXES */
+  /* OKNA */
+  .window { position: absolute; width: 500px; min-height: 100px; display: flex; flex-direction: column; }
+  .window.active { z-index: 2000 !important; }
+  .window.inactive .title-bar { background: linear-gradient(to bottom, #7697e7 0%, #7e9ee9 100%) !important; }
+  .window.inactive .title-bar-text { color: #d6e5ff !important; }
+  .window.maximized { width: 100% !important; height: 100% !important; top: 0 !important; left: 0 !important; }
+
+  /* TASKBAR */
+  #taskbar {
+    position: absolute; bottom: 0; width: 100%; height: var(--taskbar-height);
+    background: linear-gradient(to bottom, #245dda 0%, #0972f5 9%, #1e52bd 18%, #1e52bd 92%, #133f91 100%);
+    display: flex; align-items: center; z-index: 5000;
+  }
   #start-button {
     width: 166px; height: 100%;
     background: url('./img/Windows XP Start Button.png') no-repeat center/contain;
-    border: none; position: relative;
+    border: none; cursor: pointer;
   }
-  
+  #taskbar-apps { flex-grow: 1; display: flex; gap: 5px; padding: 0 10px; }
+  .task-item { 
+    height: 24px; width: 150px; background: #3c81f3; color: white; 
+    font-size: 11px; display: flex; align-items: center; padding: 0 8px; border: 1px solid #133f91;
+  }
+  .task-item.active { background: #1e52bd; box-shadow: inset 1px 1px 2px #000; }
+  .taskbar-right { padding: 0 15px; color: white; font-size: 11px; border-left: 1px solid #084069; }
+
+  /* START MENU - VYSSIE */
   #start-menu {
     position: absolute; bottom: var(--taskbar-height); left: 0;
-    width: 380px; background: #1e52bd; display: none;
-    flex-direction: column; z-index: 9999; padding: 2px;
-    border: 1px solid #133f91; border-radius: 5px 5px 0 0;
+    width: 380px; height: 550px; /* Zvysena vyska */
+    background: #1e52bd; border: 1px solid #133f91; display: none;
+    flex-direction: column; z-index: 6000; padding: 2px;
   }
 
   .start-footer-btn {
     background: none; border: none; color: white; font-size: 11px;
-    display: flex; align-items: center; gap: 5px; padding: 4px 8px;
+    padding: 10px 15px; display: flex; align-items: center; gap: 8px; cursor: pointer;
   }
-  .start-footer-btn:hover { background: #4485f6; border-radius: 2px; }
+  .start-footer-btn:hover { background: rgba(255,255,255,0.2); }
 
-  /* CONTEXT MENU */
-  #context-menu {
-    position: fixed; background: #fff; border: 1px solid #aca899;
-    box-shadow: 2px 2px 2px rgba(0,0,0,0.3); padding: 2px;
-    z-index: 100000; display: none; min-width: 150px;
-  }
-  .menu-item { 
-    padding: 5px 20px; font-size: 11px; color: #000;
-  }
-  .menu-item:hover { background: #316ac5; color: #fff; }
+  /* CMD */
+  .cmd-container { background: black; color: #dfdfdf; font-family: 'Consolas', monospace; height: 350px; padding: 10px; overflow-y: auto; }
+  .cmd-input { background: none; border: none; color: white; outline: none; width: 80%; font-family: inherit; }
 
-  /* SHUTDOWN DIALOG */
-  #shutdown-overlay {
-    position: fixed; inset: 0; background: rgba(0,0,0,0.7);
-    display: none; z-index: 20000; align-items: center; justify-content: center;
-  }
-
-  /* GOODBYE PAGE */
+  /* GOODBYE */
   #goodbye-page {
     position: fixed; inset: 0; background: #003399; color: white;
-    z-index: 30000; display: none; flex-direction: column;
-    align-items: center; justify-content: center; text-align: center;
-    font-family: 'Segoe UI', Tahoma, sans-serif;
+    z-index: 30000; display: none; flex-direction: column; align-items: center; justify-content: center;
   }
 </style>
 </head>
 <body oncontextmenu="return showContextMenu(event)">
 
-<div id="custom-cursor"></div>
 <div id="startup"></div>
 
-<div id="shutdown-overlay">
-  <div class="window" style="width: 300px;">
-    <div class="title-bar"><div class="title-bar-text">Turn off computer</div></div>
-    <div class="window-body" style="display:flex; justify-content:space-around; padding: 20px;">
-      <div style="text-align:center;" onclick="location.reload()">
-        <img src="./img/Shutdown.png" style="width:32px; filter: hue-rotate(90deg);"><br>Restart
-      </div>
-      <div style="text-align:center;" onclick="startShutdown()">
-        <img src="./img/Shutdown.png" style="width:32px;"><br>Turn Off
-      </div>
-    </div>
-    <div class="window-body" style="text-align:right;">
-      <button onclick="document.getElementById('shutdown-overlay').style.display='none'">Cancel</button>
-    </div>
-  </div>
-</div>
-
-<div id="goodbye-page">
-  <h1 style="font-weight: lighter; font-size: 3em;">Thank you for using XP.js.org!</h1>
-  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Octicons-mark-github.svg/2048px-Octicons-mark-github.svg.png" width="80" style="margin: 20px;">
-  <p style="max-width: 600px; line-height: 1.6;">
-    This project is a tribute to the legendary Windows XP, recreated with modern web technologies.<br>
-    Made with 💙 by <strong>Adko5558 Services!</strong> on 12.1.2025.<br><br>
-    Special thanks to <strong><a href="https://github.com/botoxparty/XP.css" style="color:#ffcc00; text-decoration:none;">botoxparty</a></strong> for the amazing XP.css library.
-  </p>
-  <div style="margin-top: 40px;">
-    <button style="padding: 10px 20px;" onclick="location.reload()">Turn on Windows XP</button>
-    <p style="margin-top: 15px;"><a href="https://github.com/xp-js/xp-js.github.io" style="color: #fff;">Visit Github Repository</a></p>
-  </div>
-</div>
-
-<div id="desktop" onclick="hideAllMenus()">
-  <div id="selection-box" style="position: absolute; border: 1px dotted #fff; background: rgba(255,255,255,0.2); pointer-events: none; display: none; z-index: 1000;"></div>
+<div id="desktop" onmousedown="startSelection(event)">
+  <div id="selection-box"></div>
   
   <div id="icons">
     <div class="desktop-icon" ondblclick="openApp('mycomputer', 'My Computer', './img/My Computer.webp')">
       <img src="./img/My Computer.webp"> My Computer
-    </div>
-    <div class="desktop-icon" ondblclick="openApp('fileexplorer', 'My Documents', './img/Folder.png')">
-      <img src="./img/Folder.png"> My Documents
     </div>
     <div class="desktop-icon big-icon" ondblclick="openApp('ieerror', 'Internet Explorer', './img/Internet Explorer.png')">
       <img src="./img/Internet Explorer.png"> Internet Explorer
@@ -166,84 +116,68 @@
     </div>
     <div id="dynamic-icons" style="display: contents;"></div>
   </div>
-  
+
   <div id="window-layer"></div>
 </div>
 
-<div id="context-menu">
-  <div class="menu-item" onclick="createNewFolder()">New Folder</div>
-  <div id="icon-options" style="display:none;">
-    <hr>
-    <div class="menu-item" onclick="renameFolder()">Rename</div>
-    <div class="menu-item" onclick="deleteFolder()" style="color:red;">Delete</div>
-  </div>
-</div>
-
 <div id="start-menu">
-  <div class="start-header" style="height:55px; background: linear-gradient(to bottom, #1e52bd 0%, #4485f6 100%); display:flex; align-items:center; padding:0 10px; color:white; font-weight:bold; border-bottom:1px solid #f9b147;">
-    <div class="user-pic" style="width:42px; height:42px; border:2px solid #fff; border-radius:4px; margin-right:10px; background: url('./img/Chess.png') center/cover;"></div>
-    <span>Administrator</span>
+  <div class="start-header" style="height:60px; background: linear-gradient(to bottom, #1e52bd 0%, #4485f6 100%); display:flex; align-items:center; padding:0 15px; color:white; font-weight:bold; border-bottom:1px solid #f9b147;">
+    <div style="width:45px; height:45px; border:2px solid #fff; border-radius:4px; background: url('./img/Chess.png') center/cover;"></div>
+    <span style="margin-left:15px; font-size:16px;">Administrator</span>
   </div>
-  <div style="display:flex; background:#fff; border:1px solid #1e52bd; flex-grow:1;">
-    <div style="width:50%; background:white; padding:5px;">
-      <div class="start-item" style="display:flex; align-items:center; padding:5px;" onclick="openApp('ieerror', 'Internet Explorer', './img/Internet Explorer.png')">
-        <img src="./img/Internet Explorer.png" width="24" style="margin-right:10px;"> Internet Explorer
-      </div>
-      <div class="start-item" style="display:flex; align-items:center; padding:5px;" onclick="openApp('notepad', 'Notepad', './img/Text Document.png')">
-        <img src="./img/Text Document.png" width="24" style="margin-right:10px;"> Notepad
-      </div>
-      <div class="start-item" style="display:flex; align-items:center; padding:5px;" onclick="openApp('cmd', 'Command Prompt', './img/CMD.png')">
-        <img src="./img/CMD.png" width="24" style="margin-right:10px;"> Command Prompt
-      </div>
+  <div style="display:flex; background:#fff; flex-grow:1; border: 1px solid #133f91;">
+    <div style="width:50%; padding:10px;">
+        <div class="start-item" onclick="openApp('notepad', 'Notepad', './img/Text Document.png')" style="display:flex; align-items:center; margin-bottom:10px; cursor:pointer;">
+            <img src="./img/Text Document.png" width="32" style="margin-right:10px;"> Notepad
+        </div>
+        <div class="start-item" onclick="openApp('cmd', 'Command Prompt', './img/CMD.png')" style="display:flex; align-items:center; cursor:pointer;">
+            <img src="./img/CMD.png" width="32" style="margin-right:10px;"> Command Prompt
+        </div>
     </div>
-    <div style="width:50%; background:#dbeafe; padding:10px; border-left:1px solid #91b0df; color:#003399;">
-      <div style="font-weight:bold;">My Documents</div>
-      <div style="font-weight:bold;">My Computer</div>
-      <hr style="border:0; border-top:1px solid #91b0df; margin: 10px 0;">
-      <div>Control Panel</div>
-      <div>Run...</div>
+    <div style="width:50%; background:#dbeafe; padding:15px; border-left:1px solid #91b0df; color:#003399;">
+        <div style="font-weight:bold; margin-bottom:10px;">My Documents</div>
+        <div style="font-weight:bold; margin-bottom:10px;">My Computer</div>
+        <hr style="border:0; border-top:1px solid #91b0df; margin: 15px 0;">
+        <div>Control Panel</div>
+        <div>Run...</div>
     </div>
   </div>
-  <div class="start-footer" style="height:40px; background: linear-gradient(to top, #1e52bd 0%, #4485f6 100%); display:flex; justify-content:flex-end; align-items:center; padding:0 10px; gap:5px;">
-    <button class="start-footer-btn">Log Off</button>
-    <button class="start-footer-btn" onclick="document.getElementById('shutdown-overlay').style.display='flex'">
-      <img src="./img/Shutdown.png" width="16"> Turn Off Computer
+  <div class="start-footer" style="height:45px; background: linear-gradient(to top, #1e52bd 0%, #4485f6 100%); display:flex; justify-content:flex-end; align-items:center; padding:0 10px;">
+    <button class="start-footer-btn" onclick="startShutdown()">Log Off</button>
+    <button class="start-footer-btn" onclick="startShutdown()" style="font-weight:bold;">
+      <img src="./img/Shutdown.png" width="18"> Turn Off Computer
     </button>
   </div>
 </div>
 
 <div id="taskbar">
   <button id="start-button" onclick="toggleStartMenu(event)"></button>
-  <div id="taskbar-apps" style="flex-grow:1; display:flex; align-items:center; gap:5px; padding:0 10px;"></div>
-  <div class="taskbar-right" style="padding:0 10px; color:white; display:flex; align-items:center; font-size:11px; border-left:1px solid #084069;">
-    <div id="clock">12:00</div>
-  </div>
+  <div id="taskbar-apps"></div>
+  <div class="taskbar-right"><div id="clock">12:00</div></div>
+</div>
+
+<div id="goodbye-page">
+  <h1 style="font-weight: 300; font-size: 3.5em;">Thank you for using XP.js.org!</h1>
+  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Octicons-mark-github.svg/2048px-Octicons-mark-github.svg.png" width="100" style="margin: 30px;">
+  <p style="font-size: 1.2em;">Made with 💙 by <strong>Adko5558 Services!</strong></p>
+  <p style="margin-top: 10px;">Made on 12.1.2025 using <a href="https://github.com/botoxparty/XP.css" style="color: #ffcc00;">XP.css</a>. Big thanks to botoxparty!</p>
+  <button style="margin-top: 40px; padding: 10px 30px;" onclick="location.reload()">Turn on Windows XP</button>
 </div>
 
 <script>
   let zIndex = 1000;
   let folders = JSON.parse(localStorage.getItem('xp_folders') || '[]');
-  let selectedIconId = null;
 
-  // 1. ULTRA-SMOOTH KURZOR
-  const cursor = document.getElementById('custom-cursor');
-  document.addEventListener('mousemove', (e) => {
-    cursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
-    const hover = e.target.closest('button, .desktop-icon, .start-item, .menu-item, textarea, input, [onclick]');
-    document.body.classList.toggle('pointer-cursor', !!hover);
-  });
-
-  // 2. STARTUP & CLOCK
+  // STARTUP
   setTimeout(() => {
     document.getElementById('startup').style.opacity = '0';
     setTimeout(() => {
       document.getElementById('startup').style.display = 'none';
       document.getElementById('desktop').style.display = 'block';
-      cursor.style.display = 'block';
-      renderFolders();
       updateClock();
+      renderFolders();
     }, 500);
-  }, 3500);
+  }, 3000);
 
   function updateClock() {
     const d = new Date();
@@ -251,22 +185,25 @@
     setTimeout(updateClock, 10000);
   }
 
-  // 3. WINDOW LOGIC (FOCUS & MULTITASKING)
-  function openApp(id, title, icon, isFolder = false) {
+  // FOCUS & WINDOWS
+  function openApp(id, title, icon) {
+    document.getElementById('start-menu').style.display = 'none';
     const existing = document.querySelector(`.window[data-id="${id}"]`);
-    if (existing) { focusWindow(existing); existing.style.display = 'block'; return; }
+    if(existing) { focusWin(existing); existing.style.display = 'block'; return; }
 
     const win = document.createElement('div');
     win.className = 'window active';
-    win.style.left = (150 + (zIndex % 10) * 20) + 'px';
-    win.style.top = (100 + (zIndex % 10) * 20) + 'px';
+    win.style.left = '150px'; win.style.top = '100px';
     win.style.zIndex = ++zIndex;
     win.setAttribute('data-id', id);
 
-    let content = isFolder ? `<div style="padding:20px; background:white; height:200px;">Folder is empty.</div>` : getTemplate(id);
+    let bodyHTML = '';
+    if(id === 'cmd') bodyHTML = `<div class="cmd-container"><div class="hist">Microsoft Windows XP [Version 5.1.2600]</div><div style="display:flex">C:\\> <input type="text" class="cmd-input" autofocus></div></div>`;
+    else if(id === 'notepad') bodyHTML = `<textarea style="width:100%; height:300px; border:none; outline:none; resize:none;"></textarea>`;
+    else bodyHTML = `<div style="padding:20px; display:flex; gap:10px; background:white;"><img src="./img/Error.png" width="32"> Connection error.</div>`;
 
     win.innerHTML = `
-      <div class="title-bar" onmousedown="focusWindow(this.parentElement)">
+      <div class="title-bar" onmousedown="focusWin(this.parentElement)">
         <div class="title-bar-text"><img src="${icon}" width="14"> ${title}</div>
         <div class="title-bar-controls">
           <button aria-label="Minimize" onclick="minimizeWin('${id}')"></button>
@@ -274,17 +211,16 @@
           <button aria-label="Close" onclick="closeWin('${id}')"></button>
         </div>
       </div>
-      <div class="window-body" style="margin:0; padding:0;">${content}</div>
+      <div class="window-body" style="margin:0; padding:0; background: #ece9d8;">${bodyHTML}</div>
     `;
 
     document.getElementById('window-layer').appendChild(win);
     makeDraggable(win);
     if(id === 'cmd') initCMD(win);
-    focusWindow(win);
-    updateTaskbar();
+    focusWin(win);
   }
 
-  function focusWindow(win) {
+  function focusWin(win) {
     document.querySelectorAll('.window').forEach(w => w.classList.replace('active', 'inactive'));
     win.classList.replace('inactive', 'active');
     win.style.zIndex = ++zIndex;
@@ -298,113 +234,73 @@
     const bar = document.getElementById('taskbar-apps');
     bar.innerHTML = '';
     document.querySelectorAll('.window').forEach(win => {
-      const active = win.classList.contains('active');
       const btn = document.createElement('div');
-      btn.className = 'task-item' + (active ? ' active' : '');
+      btn.className = 'task-item' + (win.classList.contains('active') ? ' active' : '');
       btn.innerText = win.querySelector('.title-bar-text').innerText;
-      btn.onclick = () => { win.style.display = 'block'; focusWindow(win); };
+      btn.onclick = () => { win.style.display = 'block'; focusWin(win); };
       bar.appendChild(btn);
     });
   }
 
-  // 4. CONTEXT MENU & FOLDERS
-  function showContextMenu(e) {
-    e.preventDefault();
-    const menu = document.getElementById('context-menu');
-    const icon = e.target.closest('.desktop-icon[data-dynamic="true"]');
-    
-    selectedIconId = icon ? icon.dataset.id : null;
-    document.getElementById('icon-options').style.display = icon ? 'block' : 'none';
-    
-    menu.style.display = 'block';
-    menu.style.left = e.clientX + 'px';
-    menu.style.top = e.clientY + 'px';
-    return false;
-  }
-
-  function hideAllMenus() { 
-    document.getElementById('context-menu').style.display = 'none'; 
-    document.getElementById('start-menu').style.display = 'none';
-  }
-
-  function createNewFolder() {
-    const id = 'f_' + Date.now();
-    folders.push({ id, name: 'New Folder' });
-    saveFolders();
-    renderFolders();
-  }
-
-  function deleteFolder() {
-    folders = folders.filter(f => f.id !== selectedIconId);
-    saveFolders();
-    renderFolders();
-    closeWin(selectedIconId);
-  }
-
-  function renameFolder() {
-    const newName = prompt("Enter new name:");
-    if(newName) {
-      const f = folders.find(f => f.id === selectedIconId);
-      if(f) f.name = newName;
-      saveFolders();
-      renderFolders();
-    }
-  }
-
-  function saveFolders() { localStorage.setItem('xp_folders', JSON.stringify(folders)); }
-
-  function renderFolders() {
-    const container = document.getElementById('dynamic-icons');
-    container.innerHTML = '';
-    folders.forEach(f => {
-      const div = document.createElement('div');
-      div.className = 'desktop-icon';
-      div.dataset.dynamic = "true";
-      div.dataset.id = f.id;
-      div.innerHTML = `<img src="./img/Folder.png"> <span>${f.name}</span>`;
-      div.ondblclick = () => openApp(f.id, f.name, './img/Folder.png', true);
-      div.onmousedown = (e) => {
-        if(e.button !== 2) {
-          document.querySelectorAll('.desktop-icon').forEach(i => i.classList.remove('selected'));
-          div.classList.add('selected');
-        }
-      };
-      container.appendChild(div);
-    });
-  }
-
-  // 5. SHUTDOWN & CMD
-  function startShutdown() {
-    document.getElementById('shutdown-overlay').style.display = 'none';
-    document.getElementById('desktop').style.display = 'none';
-    document.getElementById('taskbar').style.display = 'none';
-    setTimeout(() => { document.getElementById('goodbye-page').style.display = 'flex'; }, 1000);
-  }
-
-  function getTemplate(id) {
-    if(id === 'cmd') return `<div class="cmd-body"><div class="hist">Microsoft Windows XP [Version 5.1.2600]</div><div style="display:flex">C:\> <input type="text" style="background:none; border:none; color:white; outline:none; flex:1; font-family:monospace;"></div></div>`;
-    if(id === 'notepad') return `<textarea style="width:100%; height:300px; resize:none; border:none; outline:none;"></textarea>`;
-    return `<div style="padding:20px; display:flex; gap:10px;"><img src="./img/Error.png" width="32"> Internet Explorer cannot open the site.</div><div style="text-align:center; padding:10px;"><button onclick="closeWin('ieerror')">OK</button></div>`;
-  }
-
+  // CMD LOGIC
   function initCMD(win) {
-    const input = win.querySelector('input');
+    const input = win.querySelector('.cmd-input');
     const hist = win.querySelector('.hist');
     input.addEventListener('keydown', (e) => {
       if(e.key === 'Enter') {
-        const val = input.value.toLowerCase();
-        hist.innerHTML += `<br>C:\> ${input.value}`;
-        if(val === 'cls') hist.innerHTML = '';
-        else if(val === 'ver') hist.innerHTML += '<br>Windows XP Professional [Version 5.1.2600]';
-        else if(val === 'dir') hist.innerHTML += '<br> Directory of C:\\<br>01/12/2026  12:00 PM  &lt;DIR&gt;  WINDOWS';
-        else if(val !== '') hist.innerHTML += `<br>'${val}' is not recognized as an internal or external command.`;
+        const cmd = input.value.toLowerCase();
+        hist.innerHTML += `<br>C:\\> ${input.value}`;
+        if(cmd === 'cls') hist.innerHTML = '';
+        else if(cmd === 'ver') hist.innerHTML += '<br>Windows XP Professional [Version 5.1.2600]';
+        else if(cmd !== '') hist.innerHTML += `<br>'${cmd}' is not recognized.`;
         input.value = '';
-        win.querySelector('.cmd-body').scrollTop = 10000;
+        win.querySelector('.cmd-container').scrollTop = 10000;
       }
     });
   }
 
-  // 6. DRAG & SELECTION
+  // SELECTION BOX
+  let isSelecting = false, startX, startY;
+  function startSelection(e) {
+    if(e.target.id !== 'desktop') return;
+    isSelecting = true;
+    startX = e.clientX; startY = e.clientY;
+    const box = document.getElementById('selection-box');
+    box.style.display = 'block'; box.style.width = '0'; box.style.height = '0';
+    document.querySelectorAll('.desktop-icon').forEach(i => i.classList.remove('selected'));
+  }
+
+  document.addEventListener('mousemove', (e) => {
+    if(!isSelecting) return;
+    const box = document.getElementById('selection-box');
+    const x = Math.min(e.clientX, startX), y = Math.min(e.clientY, startY);
+    const w = Math.abs(e.clientX - startX), h = Math.abs(e.clientY - startY);
+    box.style.left = x + 'px'; box.style.top = y + 'px';
+    box.style.width = w + 'px'; box.style.height = h + 'px';
+
+    document.querySelectorAll('.desktop-icon').forEach(icon => {
+      const r = icon.getBoundingClientRect();
+      if(x < r.right && x+w > r.left && y < r.bottom && y+h > r.top) icon.classList.add('selected');
+      else icon.classList.remove('selected');
+    });
+  });
+
+  document.addEventListener('mouseup', () => { isSelecting = false; document.getElementById('selection-box').style.display = 'none'; });
+
+  // SHUTDOWN
+  function startShutdown() {
+    document.getElementById('desktop').style.display = 'none';
+    document.getElementById('taskbar').style.display = 'none';
+    document.getElementById('start-menu').style.display = 'none';
+    setTimeout(() => { document.getElementById('goodbye-page').style.display = 'flex'; }, 1000);
+  }
+
+  function toggleStartMenu(e) {
+    e.stopPropagation();
+    const sm = document.getElementById('start-menu');
+    sm.style.display = sm.style.display === 'flex' ? 'none' : 'flex';
+  }
+
   function makeDraggable(win) {
     const bar = win.querySelector('.title-bar');
     bar.onmousedown = (e) => {
@@ -415,18 +311,7 @@
     };
   }
 
-  // ENTER KEY MULTI-OPEN
-  document.addEventListener('keydown', (e) => {
-    if(e.key === 'Enter') {
-      document.querySelectorAll('.desktop-icon.selected').forEach(i => i.dispatchEvent(new MouseEvent('dblclick')));
-    }
-  });
-
-  function toggleStartMenu(e) { 
-    e.stopPropagation(); 
-    const sm = document.getElementById('start-menu');
-    sm.style.display = sm.style.display === 'flex' ? 'none' : 'flex'; 
-  }
+  function renderFolders() { /* Placeholder pre ukladanie zloziek ak budes chciet */ }
 </script>
 </body>
 </html>
