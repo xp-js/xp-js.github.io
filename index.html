@@ -4,121 +4,127 @@
 <meta charset="UTF-8">
 <title>XP.js Desktop</title>
 <link rel="stylesheet" href="https://unpkg.com/xp.css">
+
 <style>
-  html, body {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    background: black;
-  }
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
 
-  /* Startup GIF fullscreen */
-  #startup {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: url('/img/startup.gif') center center no-repeat;
-    background-size: cover;
-    z-index: 9999;
-  }
+/* Startup GIF fullscreen */
+#startup {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: url('/img/startup.gif') center center no-repeat;
+  background-size: cover;
+  z-index: 9999;
+}
 
-  /* Desktop */
-  #desktop {
-    display: none;
-    width: 100%;
-    height: 100%;
-    background: url('/img/desktop-wallpaper.jpg') center center no-repeat;
-    background-size: cover;
-    position: relative;
-  }
+/* Desktop */
+#desktop {
+  display: none;
+  width: 100%;
+  height: 100%;
+  background: url('/img/Windows XP Wallpaper.jpeg') center center no-repeat;
+  background-size: cover;
+  position: relative;
+}
 
-  /* Zvislé ikony napravo */
-  #icons {
-    position: absolute;
-    top: 50px;
-    right: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-  }
+/* Zvislé ikony napravo */
+#icons {
+  position: absolute;
+  top: 50px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
 
-  #icons img {
-    width: 48px;
-    height: 48px;
-    cursor: pointer;
-  }
+#icons img {
+  width: 48px;
+  height: 48px;
+  cursor: url('/img/Cursor Hand.png'), pointer;
+}
 
-  /* Taskbar */
-  #taskbar {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    height: 40px;
-    background-color: #245DDA;
-    display: flex;
-    align-items: center;
-    padding: 0 5px;
-    box-sizing: border-box;
-    color: white;
-  }
+/* Cursor default */
+body {
+  cursor: url('/img/Cursor Basic.png'), auto;
+}
 
-  #start-button {
-    width: 70px;
-    height: 34px;
-    background: url('/img/start-button.png') no-repeat center center;
-    background-size: contain;
-    border: none;
-    cursor: pointer;
-  }
+/* Taskbar */
+#taskbar {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 40px;
+  background-color: #245DDA;
+  display: flex;
+  align-items: center;
+  padding: 0 5px;
+  box-sizing: border-box;
+  color: white;
+}
 
-  #start-menu {
-    position: absolute;
-    bottom: 40px;
-    left: 0;
-    width: 220px;
-    background: #c0c0c0;
-    border: 2px solid #000;
-    display: none;
-    flex-direction: column;
-    padding: 5px;
-    z-index: 1000;
-  }
+#start-button {
+  width: 70px;
+  height: 34px;
+  background: url('/img/Windows XP Start Button.png') no-repeat center center;
+  background-size: contain;
+  border: none;
+  cursor: pointer;
+}
 
-  #start-menu button {
-    margin: 2px 0;
-    cursor: pointer;
-    text-align: left;
-  }
+#start-menu {
+  position: absolute;
+  bottom: 40px;
+  left: 0;
+  width: 220px;
+  background: #c0c0c0;
+  border: 2px solid #000;
+  display: none;
+  flex-direction: column;
+  padding: 5px;
+  z-index: 1000;
+}
 
-  /* XP.css windows styling */
-  .window {
-    width: 400px;
-    position: absolute;
-    top: 100px;
-    left: 100px;
-    display: none;
-    z-index: 999;
-  }
+#start-menu button {
+  margin: 2px 0;
+  cursor: pointer;
+  text-align: left;
+}
 
-  /* Error window styling */
-  .error-window .title-bar {
-    background-color: #000080;
-    color: white;
-  }
+/* XP.css windows already include title-bar buttons */
+.window {
+  width: 400px;
+  position: absolute;
+  top: 100px;
+  left: 100px;
+  display: none;
+  z-index: 999;
+  transition: opacity 0.8s ease;
+}
 
-  .error-window .window-body {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
+/* Error window styling */
+.error-window .title-bar {
+  background-color: #000080;
+  color: white;
+}
 
-  .error-window img {
-    width: 32px;
-    height: 32px;
-  }
+.error-window .window-body {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.error-window img {
+  width: 32px;
+  height: 32px;
+}
 </style>
 </head>
 <body>
@@ -128,34 +134,69 @@
 <div id="desktop">
   <!-- Ikony -->
   <div id="icons">
-    <img src="/img/notepad.png" title="Notepad" onclick="openWindow('notepad')">
-    <img src="/img/task-manager.png" title="Task Manager" onclick="openWindow('taskmanager')">
-    <img src="/img/file-explorer.png" title="File Explorer" onclick="openWindow('fileexplorer')">
-    <img src="/img/error.png" title="Internet Explorer" onclick="openWindow('ieerror')">
+    <img src="/img/Text Document.png" title="Notepad" onclick="openWindow('notepad')">
+    <img src="/img/CMD.png" title="Command Prompt" onclick="openWindow('cmd')">
+    <img src="/img/My Computer.webp" title="My Computer" onclick="openWindow('mycomputer')">
+    <img src="/img/Folder.png" title="File Explorer" onclick="openWindow('fileexplorer')">
+    <img src="/img/Internet Explorer.png" title="Internet Explorer" onclick="openWindow('ieerror')">
+    <img src="/img/Recycle Bin.png" title="Recycle Bin" onclick="openWindow('recycle')">
   </div>
 
-  <!-- XP windows -->
+  <!-- XP.css windows -->
   <div id="notepad" class="window">
     <div class="title-bar">
       <div class="title-bar-text">Notepad</div>
+      <div class="title-bar-controls">
+        <button aria-label="Minimize"></button>
+        <button aria-label="Maximize"></button>
+        <button aria-label="Close" onclick="closeWindow('notepad')"></button>
+      </div>
     </div>
     <div class="window-body">
       <textarea style="width:100%;height:150px;"></textarea>
     </div>
   </div>
 
-  <div id="taskmanager" class="window">
+  <div id="cmd" class="window">
     <div class="title-bar">
-      <div class="title-bar-text">Task Manager</div>
+      <div class="title-bar-text">Command Prompt</div>
+      <div class="title-bar-controls">
+        <button aria-label="Minimize"></button>
+        <button aria-label="Maximize"></button>
+        <button aria-label="Close" onclick="closeWindow('cmd')"></button>
+      </div>
     </div>
     <div class="window-body">
-      <p>CPU Usage: 14%</p>
+      <p>C:\Users\You&gt;_</p>
+    </div>
+  </div>
+
+  <div id="mycomputer" class="window">
+    <div class="title-bar">
+      <div class="title-bar-text">My Computer</div>
+      <div class="title-bar-controls">
+        <button aria-label="Minimize"></button>
+        <button aria-label="Maximize"></button>
+        <button aria-label="Close" onclick="closeWindow('mycomputer')"></button>
+      </div>
+    </div>
+    <div class="window-body">
+      <ul>
+        <li>Local Disk (C:)</li>
+        <li>Documents</li>
+        <li>Pictures</li>
+      </ul>
     </div>
   </div>
 
   <div id="fileexplorer" class="window">
     <div class="title-bar">
       <div class="title-bar-text">File Explorer</div>
+      <div class="title-bar-controls">
+        <button aria-label="Minimize"></button>
+        <button aria-label="Maximize"></button>
+        <button aria-label="Close" onclick="closeWindow('fileexplorer')"></button>
+      </div>
     </div>
     <div class="window-body">
       <ul>
@@ -166,15 +207,35 @@
     </div>
   </div>
 
+  <div id="recycle" class="window">
+    <div class="title-bar">
+      <div class="title-bar-text">Recycle Bin</div>
+      <div class="title-bar-controls">
+        <button aria-label="Minimize"></button>
+        <button aria-label="Maximize"></button>
+        <button aria-label="Close" onclick="closeWindow('recycle')"></button>
+      </div>
+    </div>
+    <div class="window-body">
+      <p>Recycle Bin is empty</p>
+    </div>
+  </div>
+
   <div id="ieerror" class="window error-window">
     <div class="title-bar">
       <div class="title-bar-text">Internet Explorer</div>
+      <div class="title-bar-controls">
+        <button aria-label="Minimize"></button>
+        <button aria-label="Maximize"></button>
+        <button aria-label="Close" onclick="closeWindow('ieerror')"></button>
+      </div>
     </div>
     <div class="window-body">
-      <img src="/img/error.png" alt="Error">
+      <img src="/img/Error.png" alt="Error">
       <p>Internet Explorer is not available. Please use another browser.</p>
     </div>
   </div>
+
 </div>
 
 <!-- Taskbar -->
@@ -185,28 +246,35 @@
 <!-- Start menu -->
 <div id="start-menu">
   <button onclick="openWindow('notepad')">Notepad</button>
-  <button onclick="openWindow('taskmanager')">Task Manager</button>
+  <button onclick="openWindow('cmd')">Command Prompt</button>
+  <button onclick="openWindow('mycomputer')">My Computer</button>
   <button onclick="openWindow('fileexplorer')">File Explorer</button>
 </div>
 
 <script>
-  // Po 6 sekundách startup GIF nahradí desktop
+  // Startup GIF 6s -> desktop
   setTimeout(() => {
     document.getElementById('startup').style.display = 'none';
     document.getElementById('desktop').style.display = 'block';
   }, 6000);
 
-  // Okná
-  function openWindow(id) {
-    const win = document.getElementById(id);
-    win.style.display = 'block';
-    bringToFront(win);
-  }
-
   // Start menu
   function toggleStartMenu() {
     const menu = document.getElementById('start-menu');
     menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
+  }
+
+  // Open window
+  function openWindow(id) {
+    const win = document.getElementById(id);
+    win.style.opacity = 0;
+    win.style.display = 'block';
+    bringToFront(win);
+    setTimeout(() => { win.style.opacity = 1; }, 50); // animácia 0.8s
+  }
+
+  function closeWindow(id) {
+    document.getElementById(id).style.display = 'none';
   }
 
   // Drag & Drop
@@ -230,9 +298,7 @@
     }
   });
 
-  document.addEventListener('mouseup', () => {
-    draggedWindow = null;
-  });
+  document.addEventListener('mouseup', () => { draggedWindow = null; });
 
   function bringToFront(win) {
     document.querySelectorAll('.window').forEach(w => w.style.zIndex = 998);
