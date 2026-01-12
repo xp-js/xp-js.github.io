@@ -4,21 +4,30 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>XP-js</title>
-  <link rel="stylesheet" href="xp.css">
+  <link rel="stylesheet" href="https://unpkg.com/xp.css">
   <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
+    }
+
     /* Startup screen */
     #startup {
       position: fixed;
       top: 0; left: 0;
-      width: 100vw; height: 100vh;
-      background: #000;
+      width: 100vw;
+      height: 100vh;
+      background: black;
       display: flex;
       justify-content: center;
       align-items: center;
       z-index: 9999;
     }
 
-    /* Desktop layout */
+    /* Desktop */
     #desktop {
       display: none;
       width: 100vw;
@@ -26,16 +35,23 @@
       background: url('img/Windows XP Wallpaper.jpeg') no-repeat center center;
       background-size: cover;
       font-family: 'Tahoma', sans-serif;
+      position: relative;
     }
 
-    /* Ikony na ploche */
+    /* Ikony na ploche - zvisle napravo */
+    #icons {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
     .icon {
       width: 80px;
       text-align: center;
       color: white;
       font-size: 12px;
-      margin: 10px;
-      display: inline-block;
       cursor: pointer;
       user-select: none;
     }
@@ -53,31 +69,46 @@
       left: 0;
       width: 100%;
       height: 40px;
-      background: #c0c0c0;
+      background: #245DDA;
       display: flex;
       align-items: center;
       padding: 0 10px;
       box-sizing: border-box;
-      border-top: 2px solid #fff;
+      z-index: 1000;
+      gap: 10px;
     }
     #start-button {
-      width: 80px;
+      width: 100px;
       height: 36px;
       background: url('img/Windows XP Start Button.png') no-repeat center center;
       background-size: contain;
+      cursor: pointer;
+    }
+    #task-icons {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    #task-icons img {
+      width: 24px;
+      height: 24px;
       cursor: pointer;
     }
 
     /* Okno */
     .window {
       position: absolute;
-      top: 100px;
-      left: 100px;
-      width: 300px;
+      top: 50px;
+      left: 50px;
+      width: 600px;
+      height: 400px;
       border: 2px solid #000;
       box-shadow: 4px 4px #888;
       background: #c0c0c0;
       display: none;
+      z-index: 500;
+      display: flex;
+      flex-direction: column;
     }
     .title-bar {
       background: #000080;
@@ -89,8 +120,10 @@
       align-items: center;
     }
     .window-body {
+      flex: 1;
       padding: 5px;
       background: #fff;
+      overflow: hidden;
     }
     .status-bar {
       display: flex;
@@ -101,107 +134,167 @@
       font-size: 10px;
     }
 
+    /* Start menu */
+    #start-menu {
+      position: absolute;
+      bottom: 40px;
+      left: 10px;
+      width: 200px;
+      background: #c0c0c0;
+      border: 2px solid #000;
+      display: none;
+      z-index: 1001;
+    }
+    #start-menu ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    #start-menu li {
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+    #start-menu li:hover {
+      background: #000080;
+      color: white;
+    }
   </style>
 </head>
 <body>
   <!-- Startup screen -->
   <div id="startup">
-    <img src="img/startup.gif" alt="Startup" />
+    <img src="img/startup.gif" alt="Startup">
   </div>
 
   <!-- Desktop -->
   <div id="desktop">
-    <!-- Ikony na ploche -->
-    <div class="icon" onclick="openWindow('MyComputer')">
-      <img src="img/My Computer.webp" alt="My Computer">
-      My Computer
+    <!-- Ikony -->
+    <div id="icons">
+      <div class="icon" onclick="openWindow('MyComputer')">
+        <img src="img/My Computer.webp" alt="My Computer">
+        My Computer
+      </div>
+      <div class="icon" onclick="openWindow('RecycleBin')">
+        <img src="img/Recycle Bin.png" alt="Recycle Bin">
+        Recycle Bin
+      </div>
+      <div class="icon" onclick="openWindow('CMD')">
+        <img src="img/CMD.png" alt="CMD">
+        CMD
+      </div>
+      <div class="icon" onclick="openWindow('TextDoc')">
+        <img src="img/Text Document.png" alt="Text Document">
+        Text Document
+      </div>
+      <div class="icon" onclick="openWindow('Folder')">
+        <img src="img/Folder.png" alt="Folder">
+        Folder
+      </div>
+      <div class="icon" onclick="openWindow('IE')">
+        <img src="img/Internet Explorer.png" alt="Internet Explorer">
+        Internet Explorer
+      </div>
     </div>
-    <div class="icon" onclick="openWindow('RecycleBin')">
-      <img src="img/Recycle Bin.png" alt="Recycle Bin">
-      Recycle Bin
-    </div>
-    <div class="icon" onclick="openWindow('CMD')">
-      <img src="img/CMD.png" alt="CMD">
-      CMD
-    </div>
-    <div class="icon" onclick="openWindow('TextDoc')">
-      <img src="img/Text Document.png" alt="Text Document">
-      Text Document
-    </div>
-    <div class="icon">
-      <img src="img/Folder.png" alt="Folder">
-      Folder
-    </div>
-    <div class="icon">
-      <img src="img/Internet Explorer.png" alt="Internet Explorer">
-      IE
-    </div>
-    <div class="icon">
-      <img src="img/Error.png" alt="Error">
-      Error
-    </div>
-    <div class="icon">
-      <img src="img/Warning.webp" alt="Warning">
-      Warning
-    </div>
-  </div>
 
-  <!-- Taskbar -->
-  <div id="taskbar">
-    <div id="start-button"></div>
-  </div>
+    <!-- Taskbar -->
+    <div id="taskbar">
+      <div id="start-button" onclick="toggleStartMenu()"></div>
+      <div id="task-icons">
+        <img src="img/My Computer.webp" onclick="openWindow('MyComputer')">
+        <img src="img/Internet Explorer.png" onclick="openWindow('IE')">
+      </div>
+    </div>
 
-  <!-- Príklad okna -->
-  <div id="MyComputer" class="window">
-    <div class="title-bar">
-      <span>My Computer</span>
-      <button onclick="closeWindow('MyComputer')">X</button>
+    <!-- Start menu -->
+    <div id="start-menu">
+      <ul>
+        <li onclick="openWindow('MyComputer')">My Computer</li>
+        <li onclick="openWindow('RecycleBin')">Recycle Bin</li>
+        <li onclick="openWindow('CMD')">Command Prompt</li>
+        <li onclick="openWindow('TextDoc')">Text Document</li>
+        <li onclick="openWindow('Folder')">Folder</li>
+        <li onclick="openWindow('IE')">Internet Explorer</li>
+      </ul>
     </div>
-    <div class="window-body">
-      <p>Welcome to My Computer!</p>
-    </div>
-    <div class="status-bar">
-      <span>Ready</span>
-      <span>CPU Usage: 5%</span>
-    </div>
-  </div>
 
-  <div id="RecycleBin" class="window">
-    <div class="title-bar">
-      <span>Recycle Bin</span>
-      <button onclick="closeWindow('RecycleBin')">X</button>
+    <!-- Okna -->
+    <div id="MyComputer" class="window">
+      <div class="title-bar">
+        <span>My Computer</span>
+        <button onclick="closeWindow('MyComputer')">X</button>
+      </div>
+      <div class="window-body">
+        <p>Welcome to My Computer!</p>
+      </div>
+      <div class="status-bar">
+        <span>Ready</span>
+        <span>CPU Usage: 5%</span>
+      </div>
     </div>
-    <div class="window-body">
-      <p>Recycle Bin is empty.</p>
-    </div>
-    <div class="status-bar">
-      <span>Ready</span>
-    </div>
-  </div>
 
-  <div id="CMD" class="window">
-    <div class="title-bar">
-      <span>Command Prompt</span>
-      <button onclick="closeWindow('CMD')">X</button>
+    <div id="RecycleBin" class="window">
+      <div class="title-bar">
+        <span>Recycle Bin</span>
+        <button onclick="closeWindow('RecycleBin')">X</button>
+      </div>
+      <div class="window-body">
+        <p>Recycle Bin is empty.</p>
+      </div>
+      <div class="status-bar">
+        <span>Ready</span>
+      </div>
     </div>
-    <div class="window-body">
-      <p>C:\Users\You&gt;</p>
-    </div>
-    <div class="status-bar">
-      <span>Press F1 for help</span>
-    </div>
-  </div>
 
-  <div id="TextDoc" class="window">
-    <div class="title-bar">
-      <span>Text Document</span>
-      <button onclick="closeWindow('TextDoc')">X</button>
+    <div id="CMD" class="window">
+      <div class="title-bar">
+        <span>Command Prompt</span>
+        <button onclick="closeWindow('CMD')">X</button>
+      </div>
+      <div class="window-body">
+        <p>C:\Users\You&gt;</p>
+      </div>
+      <div class="status-bar">
+        <span>Press F1 for help</span>
+      </div>
     </div>
-    <div class="window-body">
-      <p>This is a text document.</p>
+
+    <div id="TextDoc" class="window">
+      <div class="title-bar">
+        <span>Text Document</span>
+        <button onclick="closeWindow('TextDoc')">X</button>
+      </div>
+      <div class="window-body">
+        <iframe src="https://www.google.com" width="100%" height="100%" frameborder="0"></iframe>
+      </div>
+      <div class="status-bar">
+        <span>Ready</span>
+      </div>
     </div>
-    <div class="status-bar">
-      <span>Ready</span>
+
+    <div id="Folder" class="window">
+      <div class="title-bar">
+        <span>Folder</span>
+        <button onclick="closeWindow('Folder')">X</button>
+      </div>
+      <div class="window-body">
+        <p>This is a folder.</p>
+      </div>
+      <div class="status-bar">
+        <span>Ready</span>
+      </div>
+    </div>
+
+    <div id="IE" class="window">
+      <div class="title-bar">
+        <span>Internet Explorer</span>
+        <button onclick="closeWindow('IE')">X</button>
+      </div>
+      <div class="window-body">
+        <iframe src="https://www.google.com" width="100%" height="100%" frameborder="0"></iframe>
+      </div>
+      <div class="status-bar">
+        <span>Ready</span>
+      </div>
     </div>
   </div>
 
@@ -212,15 +305,32 @@
       document.getElementById('desktop').style.display = 'block';
     }, 6000);
 
-    // Funkcia na otváranie okien
+    // Otvorenie okien
     function openWindow(id) {
-      document.getElementById(id).style.display = 'block';
+      const w = document.getElementById(id);
+      w.style.display = 'flex';
+      w.style.zIndex = 501; // vždy nad ostatnými
     }
 
-    // Funkcia na zatvorenie okien
+    // Zatvorenie okien
     function closeWindow(id) {
       document.getElementById(id).style.display = 'none';
     }
+
+    // Start menu
+    function toggleStartMenu() {
+      const menu = document.getElementById('start-menu');
+      menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+    }
+
+    // Klik mimo start menu zatvori ho
+    document.addEventListener('click', (e) => {
+      const menu = document.getElementById('start-menu');
+      const start = document.getElementById('start-button');
+      if (!menu.contains(e.target) && e.target !== start) {
+        menu.style.display = 'none';
+      }
+    });
   </script>
 </body>
 </html>
