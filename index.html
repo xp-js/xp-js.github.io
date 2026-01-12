@@ -1,117 +1,141 @@
 <!DOCTYPE html>
 <html lang="sk">
 <head>
-  <meta charset="UTF-8">
-  <title>XP.js Desktop</title>
-  <link rel="stylesheet" href="https://unpkg.com/xp.css">
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      overflow: hidden; /* žiadne scrollovanie */
-      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    }
+<meta charset="UTF-8">
+<title>XP.js Desktop</title>
+<link rel="stylesheet" href="https://unpkg.com/xp.css">
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background: black;
+  }
 
-    /* Desktop tapeta fullscreen */
-    body {
-      background: url('/img/startup.gif') center center no-repeat;
-      background-size: cover;
-      display: flex;
-      flex-direction: column;
-    }
+  /* Startup GIF fullscreen */
+  #startup {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: url('/img/startup.gif') center center no-repeat;
+    background-size: cover;
+    z-index: 9999;
+  }
 
-    /* Po 6 sekundách GIF nahradíme čistým pozadím */
-    #desktop {
-      flex: 1;
-      position: relative;
-      display: none;
-      background: url('/img/desktop-wallpaper.jpg') center center no-repeat;
-      background-size: cover;
-    }
+  /* Desktop */
+  #desktop {
+    display: none;
+    width: 100%;
+    height: 100%;
+    background: url('/img/desktop-wallpaper.jpg') center center no-repeat;
+    background-size: cover;
+    position: relative;
+  }
 
-    /* Ikony zvislo vpravo */
-    #icons {
-      position: absolute;
-      top: 50px;
-      right: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
+  /* Zvislé ikony napravo */
+  #icons {
+    position: absolute;
+    top: 50px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
 
-    /* Taskbar */
-    #taskbar {
-      height: 40px;
-      background-color: #245DDA;
-      display: flex;
-      align-items: center;
-      padding: 0 10px;
-      color: white;
-    }
+  #icons img {
+    width: 48px;
+    height: 48px;
+    cursor: pointer;
+  }
 
-    #start-button {
-      font-weight: bold;
-      padding: 5px 10px;
-      background-color: #245DDA;
-      border: 1px solid white;
-      cursor: pointer;
-      font-size: 16px;
-    }
+  /* Taskbar */
+  #taskbar {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 40px;
+    background-color: #245DDA;
+    display: flex;
+    align-items: center;
+    padding: 0 5px;
+    box-sizing: border-box;
+    color: white;
+  }
 
-    #start-menu {
-      position: absolute;
-      bottom: 40px;
-      left: 0;
-      width: 200px;
-      background: white;
-      border: 2px solid #000;
-      display: none;
-      flex-direction: column;
-      padding: 5px;
-      z-index: 1000;
-    }
+  #start-button {
+    width: 70px;
+    height: 34px;
+    background: url('/img/start-button.png') no-repeat center center;
+    background-size: contain;
+    border: none;
+    cursor: pointer;
+  }
 
-    #start-menu button {
-      margin: 2px 0;
-      cursor: pointer;
-    }
+  #start-menu {
+    position: absolute;
+    bottom: 40px;
+    left: 0;
+    width: 220px;
+    background: #c0c0c0;
+    border: 2px solid #000;
+    display: none;
+    flex-direction: column;
+    padding: 5px;
+    z-index: 1000;
+  }
 
-    /* XP.css okná */
-    .window {
-      width: 400px;
-      position: absolute;
-      top: 100px;
-      left: 100px;
-      z-index: 999;
-    }
-  </style>
+  #start-menu button {
+    margin: 2px 0;
+    cursor: pointer;
+    text-align: left;
+  }
+
+  /* XP.css windows styling */
+  .window {
+    width: 400px;
+    position: absolute;
+    top: 100px;
+    left: 100px;
+    display: none;
+    z-index: 999;
+  }
+
+  /* Error window styling */
+  .error-window .title-bar {
+    background-color: #000080;
+    color: white;
+  }
+
+  .error-window .window-body {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .error-window img {
+    width: 32px;
+    height: 32px;
+  }
+</style>
 </head>
 <body>
 
 <div id="startup"></div>
 
 <div id="desktop">
-  <!-- Ikony zvislo -->
+  <!-- Ikony -->
   <div id="icons">
-    <button onclick="openWindow('browser')">🌐 Browser</button>
-    <button onclick="openWindow('notepad')">📝 Notepad</button>
-    <button onclick="openWindow('taskmanager')">📊 Task Manager</button>
-    <button onclick="openWindow('fileexplorer')">📁 File Explorer</button>
+    <img src="/img/notepad.png" title="Notepad" onclick="openWindow('notepad')">
+    <img src="/img/task-manager.png" title="Task Manager" onclick="openWindow('taskmanager')">
+    <img src="/img/file-explorer.png" title="File Explorer" onclick="openWindow('fileexplorer')">
+    <img src="/img/error.png" title="Internet Explorer" onclick="openWindow('ieerror')">
   </div>
 
-  <!-- XP okná -->
-  <div id="browser" class="window" style="display:none;">
-    <div class="title-bar">
-      <div class="title-bar-text">Browser</div>
-    </div>
-    <div class="window-body">
-      <p>Google sa nedá vložiť do iframe, klikni tu:</p>
-      <button onclick="window.open('https://google.com', '_blank')">Otvoriť Google</button>
-    </div>
-  </div>
-
-  <div id="notepad" class="window" style="display:none;">
+  <!-- XP windows -->
+  <div id="notepad" class="window">
     <div class="title-bar">
       <div class="title-bar-text">Notepad</div>
     </div>
@@ -120,7 +144,7 @@
     </div>
   </div>
 
-  <div id="taskmanager" class="window" style="display:none;">
+  <div id="taskmanager" class="window">
     <div class="title-bar">
       <div class="title-bar-text">Task Manager</div>
     </div>
@@ -129,7 +153,7 @@
     </div>
   </div>
 
-  <div id="fileexplorer" class="window" style="display:none;">
+  <div id="fileexplorer" class="window">
     <div class="title-bar">
       <div class="title-bar-text">File Explorer</div>
     </div>
@@ -141,35 +165,78 @@
       </ul>
     </div>
   </div>
+
+  <div id="ieerror" class="window error-window">
+    <div class="title-bar">
+      <div class="title-bar-text">Internet Explorer</div>
+    </div>
+    <div class="window-body">
+      <img src="/img/error.png" alt="Error">
+      <p>Internet Explorer is not available. Please use another browser.</p>
+    </div>
+  </div>
 </div>
 
 <!-- Taskbar -->
 <div id="taskbar">
-  <div id="start-button" onclick="toggleStartMenu()">Start</div>
+  <button id="start-button" onclick="toggleStartMenu()"></button>
 </div>
 
-<!-- Start Menu -->
+<!-- Start menu -->
 <div id="start-menu">
-  <button onclick="openWindow('browser')">🌐 Browser</button>
-  <button onclick="openWindow('notepad')">📝 Notepad</button>
-  <button onclick="openWindow('taskmanager')">📊 Task Manager</button>
-  <button onclick="openWindow('fileexplorer')">📁 File Explorer</button>
+  <button onclick="openWindow('notepad')">Notepad</button>
+  <button onclick="openWindow('taskmanager')">Task Manager</button>
+  <button onclick="openWindow('fileexplorer')">File Explorer</button>
 </div>
 
 <script>
-  // Po 6 sekundách GIF nahradíme desktopom
+  // Po 6 sekundách startup GIF nahradí desktop
   setTimeout(() => {
     document.getElementById('startup').style.display = 'none';
     document.getElementById('desktop').style.display = 'block';
   }, 6000);
 
+  // Okná
   function openWindow(id) {
-    document.getElementById(id).style.display = 'block';
+    const win = document.getElementById(id);
+    win.style.display = 'block';
+    bringToFront(win);
   }
 
+  // Start menu
   function toggleStartMenu() {
     const menu = document.getElementById('start-menu');
     menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
+  }
+
+  // Drag & Drop
+  let draggedWindow = null;
+  let offsetX = 0, offsetY = 0;
+
+  document.addEventListener('mousedown', (e) => {
+    if (e.target.closest('.title-bar')) {
+      draggedWindow = e.target.closest('.window');
+      const rect = draggedWindow.getBoundingClientRect();
+      offsetX = e.clientX - rect.left;
+      offsetY = e.clientY - rect.top;
+      bringToFront(draggedWindow);
+    }
+  });
+
+  document.addEventListener('mousemove', (e) => {
+    if (draggedWindow) {
+      draggedWindow.style.left = (e.clientX - offsetX) + 'px';
+      draggedWindow.style.top = (e.clientY - offsetY) + 'px';
+    }
+  });
+
+  document.addEventListener('mouseup', () => {
+    draggedWindow = null;
+  });
+
+  function bringToFront(win) {
+    document.querySelectorAll('.window').forEach(w => w.style.zIndex = 998);
+    win.style.zIndex = 999;
   }
 </script>
 
