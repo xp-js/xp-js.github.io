@@ -3,62 +3,51 @@ WE LOVE WINDOWS XP! So we made Windows XP inside web, cuz why not ;)
 
 ---
 
-## 🖥️ About
-**xp-js** is an experimental, browser-based recreation of the classic
-**Microsoft Windows XP** experience.
+## About
+**xp-js** is a web-based project that recreates the look and basic behavior of
+the classic **Windows XP** desktop using **HTML, CSS, and JavaScript**.
 
-This project exists purely for **nostalgia, experimentation, and fun**.
-It is designed to be experienced **online only**.
+The goal of this project is to capture the visual style and nostalgic feel
+of Windows XP directly in the browser, without emulation or native execution.
 
-> This project is not an emulator and is not affiliated with Microsoft.
-
----
-
-## ⚙️ How it works
-The project uses modern web technologies and custom JavaScript logic
-to simulate the Windows XP desktop environment.
-
-Future versions may include a **virtualized environment powered by DOSBox**
-running directly in the browser.
-
-😉
+This project is intended to be experienced online only.
 
 ---
 
-## 🚀 Live Experience
-This project is intended to be accessed **exclusively via the official website**.
-
-There is no supported way to run this project locally.
-
----
-
-## ⚠️ Important Notice
-Any attempt to copy, clone, redistribute, mirror, or run this project
-outside of the official website is **not permitted**.
-
-This includes local hosting, modified deployments, and third-party mirrors.
+## Technology
+- Fully browser-based
+- Powered by JavaScript
+- No plugins, no emulators, no native components
 
 ---
 
-## 📜 Legal & Disclaimer
+## Access
+The project is officially available only through its hosted website.
+
+Running, mirroring, or redistributing this project outside of the official
+deployment is not permitted.
+
+---
+
+## Legal Notice
 Windows XP and all related names, logos, and visual elements are trademarks
 of Microsoft Corporation.
 
-This is a **fan-made experimental project** created for educational and
-entertainment purposes only.
+This is an independent, fan-made project created for experimental and
+educational purposes. It is not affiliated with or endorsed by Microsoft.
 
 ---
 
-## 🔒 License
+## License
 All rights reserved.
 
-This project and all associated source code, assets, and builds are proprietary.
-No permission is granted to use, copy, modify, redistribute, reverse-engineer,
-or deploy this project or any derivative works without explicit written
-permission from the author.
+This project, including its source code and assets, is proprietary.
+No permission is granted to copy, modify, redistribute, or deploy this project
+or any derivative works without explicit written permission from the author.
 
 ---
 
-## 💙 Credits
-Created with nostalgia by **Adko**  
-Powered by late nights, old screenshots, and bad ideas 😄
+## Author
+Made by **Adko5558 Services!**
+
+Homepage: http://87.197.121.207:5558
