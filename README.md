@@ -1,4 +1,4 @@
-# xp-js.github.io
+# xp-js.github.io (XP.js.org)
 WE LOVE WINDOWS XP! So we made Windows XP inside web, cuz why not ;)
 
 ---
