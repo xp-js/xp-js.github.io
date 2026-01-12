@@ -39,15 +39,11 @@ educational purposes. It is not affiliated with or endorsed by Microsoft.
 ---
 
 ## License
-All rights reserved.
-
-This project, including its source code and assets, is proprietary.
-No permission is granted to copy, modify, redistribute, or deploy this project
-or any derivative works without explicit written permission from the author.
+This project is open-source under the MIT License. Feel free to explore the code for educational purposes.
 
 ---
 
 ## Author
-Made by **Adko5558 Services!**
+Made by **Adko5558**! (also known as Adko5558 Services!)
 
-Homepage: http://87.197.121.207:5558 (sowwie, it sometimes offline because there is also a Minecraft Server on it xd, but will move to another port soon :D)
+
