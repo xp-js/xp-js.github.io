@@ -1,10 +1,10 @@
-# xp-js.github.io (XP.js.org)
+# XP-js (XP.js.org)!
 WE LOVE WINDOWS XP! So we made Windows XP inside web, cuz why not ;)
 
 ---
 
 ## About
-**xp-js** is a web-based project that recreates the look and basic behavior of
+**XP-js** is a web-based project that recreates the look and basic behavior of
 the classic **Windows XP** desktop using **HTML, CSS, and JavaScript**.
 
 The goal of this project is to capture the visual style and nostalgic feel
