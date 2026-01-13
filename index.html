@@ -1,24 +1,3 @@
-<!-- XP-js (XP.js.org)! WE LOVE WINDOWS XP!
-
-All credits to Adko5558 (Adko5558 Services!).
-LICENSED BY MIT LICENSE (See LICENSE file https://github.com/xp-js/xp-js.github.io/tree/main?tab=MIT-1-ov-file)
-Contributors are welcome! Make this piece of code even better!
-
-
-LINKS:
-
-Github: https://github.com/xp-js/xp-js.github.io/
-Github pages: https://XP-js.github.io/
-Official website: https://XP.js.org
-Discord: Adko5558
-Email: ihavean@idea4.net
-
-Made on 12th January 2026!
-XP-js!
--->
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -92,7 +71,7 @@ XP-js!
     display: none; align-items: center; z-index: 5000;
   }
   #start-button {
-    width: 166px; height: 100%;
+    width: 100px; height: 100%; /* Zuzeny start button */
     background: url('./img/Windows XP Start Button.png') no-repeat center/contain;
     border: none; cursor: pointer;
   }
@@ -119,11 +98,26 @@ XP-js!
     flex-direction: column; z-index: 6000; padding: 2px; border-radius: 5px 5px 0 0;
   }
 
+  /* HOVER EFEKT PRE APKY V MENU */
+  .menu-app-item {
+    cursor: pointer; display: flex; align-items: center; gap: 8px; padding: 4px; border-radius: 3px;
+  }
+  .menu-app-item:hover {
+    background: rgba(49, 106, 197, 0.1);
+    outline: 1px solid rgba(49, 106, 197, 0.3);
+  }
+
+  .shutdown-btn {
+    background: none; border: none; color: white; cursor: pointer; 
+    font-size: 11px; display: flex; align-items: center; gap: 4px;
+    padding: 2px 6px; height: 32px; /* Vyssie a uzsie */
+  }
+  .shutdown-btn:hover { background: rgba(255,255,255,0.2); border-radius: 2px; }
+
   /* CMD & NOTEPAD */
   .cmd-container { background: black; color: #dfdfdf; font-family: 'Consolas', monospace; height: 300px; padding: 10px; overflow-y: auto; }
   .cmd-input { background: transparent !important; border: none !important; color: white !important; outline: none !important; width: 80%; font-family: inherit; }
-  textarea.notepad-area { width: 100%; height: 350px; border: none; outline: none; padding: 5px; font-family: sans-serif; resize: none; }
-
+  
   /* BYEBYE SCREEN */
   #goodbye-page {
     position: fixed; inset: 0; background: #003399; color: white;
@@ -144,14 +138,17 @@ XP-js!
   <div id="selection-box"></div>
   
   <div id="icons">
-    <div class="desktop-icon" ondblclick="openApp('mycomputer', 'My Computer', './img/Recycle Bin.png')">
-      <img src="./img/Recycle Bin.png"> My Computer
+    <div class="desktop-icon" ondblclick="openApp('mycomputer', 'My Computer', './img/My Computer.webp')">
+      <img src="./img/My Computer.webp"> My Computer
     </div>
-    <div class="desktop-icon" ondblclick="openApp('ie', 'Internet Explorer', 'https://www.rw-designer.com/icon-image/20087-256x256x32.png')"> <!-- Sorry, I was too lazy to download that img xd -->
+    <div class="desktop-icon" ondblclick="openApp('ie', 'Internet Explorer', 'https://www.rw-designer.com/icon-image/20087-256x256x32.png')">
       <img src="https://www.rw-designer.com/icon-image/20087-256x256x32.png"> Internet Explorer
     </div>
-    <div class="desktop-icon" ondblclick="openApp('mines', 'Minesweeper', 'https://static.wikia.nocookie.net/logopedia/images/9/90/Microsoft_Minesweeper_%281990%29.svg/revision/latest/scale-to-width-down/200?cb=20250208061551')"> <!-- Sorry, I was too lazy to download that img xd -->
-      <img src="https://static.wikia.nocookie.net/logopedia/images/9/90/Microsoft_Minesweeper_%281990%29.svg/revision/latest/scale-to-width-down/200?cb=20250208061551"> Minesweeper
+    <div class="desktop-icon" ondblclick="openApp('mines', 'Minesweeper', './img/Minesweeper.webp')">
+      <img src="./img/Minesweeper.webp"> Minesweeper
+    </div>
+    <div class="desktop-icon" ondblclick="openApp('solitaire', 'Solitaire', 'https://static.wikia.nocookie.net/logopedia/images/f/f0/Solitaire_win-3.1.svg/revision/latest/scale-to-width-down/200?cb=20231224154351')">
+      <img src="https://static.wikia.nocookie.net/logopedia/images/f/f0/Solitaire_win-3.1.svg/revision/latest/scale-to-width-down/200?cb=20231224154351"> Solitaire
     </div>
     <div class="desktop-icon" ondblclick="openApp('recycle', 'Recycle Bin', './img/Recycle Bin.png')">
       <img src="./img/Recycle Bin.png"> Recycle Bin
@@ -168,13 +165,13 @@ XP-js!
   </div>
   <div style="display:flex; background:#fff; flex-grow:1; border: 1px solid #133f91;">
     <div style="width:50%; padding:10px;">
-        <div onclick="openApp('notepad', 'Notepad', '.https://64.media.tumblr.com/73f34eb6543708c5b237fd739b389a55/a76707adad47a36a-a6/s540x810/d5ca09678f2f10b2fa2f553a2c28a650fe3732b4.pnj')" style="cursor:pointer; display:flex; align-items:center; gap:8px; margin-bottom:10px;">
+        <div class="menu-app-item" onclick="openApp('notepad', 'Notepad', 'https://64.media.tumblr.com/73f34eb6543708c5b237fd739b389a55/a76707adad47a36a-a6/s540x810/d5ca09678f2f10b2fa2f553a2c28a650fe3732b4.pnj')" style="margin-bottom:10px;">
             <img src="https://64.media.tumblr.com/73f34eb6543708c5b237fd739b389a55/a76707adad47a36a-a6/s540x810/d5ca09678f2f10b2fa2f553a2c28a650fe3732b4.pnj" width="30"> Notepad
         </div>
-        <div onclick="openApp('calc', 'Calculator', 'https://www.rw-designer.com/icon-image/20077-256x256x8.png')" style="cursor:pointer; display:flex; align-items:center; gap:8px; margin-bottom:10px;">
+        <div class="menu-app-item" onclick="openApp('calc', 'Calculator', 'https://www.rw-designer.com/icon-image/20077-256x256x8.png')" style="margin-bottom:10px;">
             <img src="https://www.rw-designer.com/icon-image/20077-256x256x8.png" width="30"> Calculator
         </div>
-        <div onclick="openApp('cmd', 'Command Prompt', './img/CMD.png')" style="cursor:pointer; display:flex; align-items:center; gap:8px;">
+        <div class="menu-app-item" onclick="openApp('cmd', 'Command Prompt', './img/CMD.png')">
             <img src="./img/CMD.png" width="30"> Command Prompt
         </div>
     </div>
@@ -185,10 +182,12 @@ XP-js!
         <div style="font-weight:bold;">Control Panel</div>
     </div>
   </div>
-  <div style="height:45px; background: linear-gradient(to top, #1e52bd 0%, #4485f6 100%); display:flex; justify-content:flex-end; align-items:center; padding:0 10px; gap: 10px;">
-    <button onclick="startShutdown()" style="background:none; border:none; color:white; cursor:pointer; font-size:11px;">Log Off</button>
-    <button onclick="startShutdown()" style="background:none; border:none; color:white; cursor:pointer; font-size:11px; font-weight:bold;">
-      <img src="./img/Shutdown.png" width="16" style="vertical-align:middle; margin-right:5px;"> Turn Off
+  <div style="height:48px; background: linear-gradient(to top, #1e52bd 0%, #4485f6 100%); display:flex; justify-content:flex-end; align-items:center; padding:0 10px; gap: 8px;">
+    <button class="shutdown-btn" onclick="startShutdown()">
+      <img src="./img/Logoff.png" width="24" height="24"> Log Off
+    </button>
+    <button class="shutdown-btn" onclick="startShutdown()" style="font-weight:bold;">
+      <img src="./img/Shutdown.png" width="24" height="24"> Turn Off
     </button>
   </div>
 </div>
@@ -214,20 +213,15 @@ XP-js!
 <script>
   let zIndex = 1000;
 
-  // BOOT SEQUENCE (8 SECONDS)
   window.onload = () => {
     setTimeout(() => {
         document.getElementById('startup').style.display = 'none';
         document.getElementById('desktop').style.display = 'block';
-        
-        // Postupné nacitavanie komponentov (LAG EFFECT)
         setTimeout(() => { 
             document.getElementById('taskbar').style.display = 'flex';
             document.getElementById('startup-sound').play(); 
         }, 1200);
-        
         setTimeout(() => { document.getElementById('icons').style.opacity = '1'; }, 2800);
-        
         setTimeout(() => { 
             document.querySelector('.taskbar-right').style.opacity = '1';
             updateClock();
@@ -241,7 +235,6 @@ XP-js!
     setTimeout(updateClock, 10000);
   }
 
-  // FOCUS SYSTEM
   function handleGlobalClick(e) {
     const win = e.target.closest('.window');
     if (win) {
@@ -258,7 +251,6 @@ XP-js!
     updateTaskbar();
   }
 
-  // APPLICATIONS
   function openApp(id, title, icon) {
     document.getElementById('start-menu').style.display = 'none';
     if(document.querySelector(`.window[data-id="${id}"]`)) {
@@ -291,6 +283,9 @@ XP-js!
     } else if(id === 'mines') {
         win.style.width = "300px"; win.style.height = "380px";
         content = `<iframe class="app-frame" src="https://98.js.org/programs/minesweeper/"></iframe>`;
+    } else if(id === 'solitaire') {
+        win.style.width = "600px"; win.style.height = "450px";
+        content = `<iframe class="app-frame" src="https://98.js.org/programs/js-solitaire/"></iframe>`;
     } else if(id === 'ie') {
         win.style.width = "850px"; win.style.height = "600px";
         content = `<iframe class="app-frame" src="https://98.js.org/programs/explorer/index.html?address=https%3A%2F%2Fwww.google.com%2F"></iframe>`;
@@ -407,5 +402,3 @@ XP-js!
 </script>
 </body>
 </html>
-
-<!-- Byebye! Hope you like this code ;) See https://github.com/xp-js/xp-js.github.io/ -->
