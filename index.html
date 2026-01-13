@@ -122,10 +122,7 @@ XP-js!
   /* CMD & NOTEPAD */
   .cmd-container { background: black; color: #dfdfdf; font-family: 'Consolas', monospace; height: 300px; padding: 10px; overflow-y: auto; }
   .cmd-input { background: transparent !important; border: none !important; color: white !important; outline: none !important; width: 80%; font-family: inherit; }
-  
-  .notepad-menu-bar { background: #ece9d8; padding: 2px 5px; display: flex; gap: 10px; font-size: 11px; border-bottom: 1px solid #aca899; }
-  .notepad-menu-bar span:hover { background: #316ac5; color: white; cursor: default; }
-  textarea.notepad-area { width: 100%; height: 350px; border: none; outline: none; padding: 5px; font-family: 'Lucida Console', monospace; resize: none; }
+  textarea.notepad-area { width: 100%; height: 350px; border: none; outline: none; padding: 5px; font-family: sans-serif; resize: none; }
 
   /* BYEBYE SCREEN */
   #goodbye-page {
@@ -133,10 +130,8 @@ XP-js!
     z-index: 30000; display: none; flex-direction: column; align-items: center; justify-content: center;
     text-align: center; font-family: 'Segoe UI', Tahoma, sans-serif;
   }
-  
-  /* CALCULATOR */
-  .calc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; padding: 10px; background: #ece9d8; }
-  .calc-screen { grid-column: span 4; background: white; border: 1px solid #7f9db9; text-align: right; padding: 5px; font-family: monospace; font-size: 18px; margin-bottom: 10px; height: 25px; }
+
+  iframe.app-frame { width: 100%; height: 100%; border: none; background: white; }
 </style>
 </head>
 <body onmousedown="handleGlobalClick(event)">
@@ -149,20 +144,17 @@ XP-js!
   <div id="selection-box"></div>
   
   <div id="icons">
-    <div class="desktop-icon" ondblclick="openApp('mycomputer', 'My Computer', './img/My Computer.webp')">
-      <img src="./img/My Computer.webp"> My Computer
+    <div class="desktop-icon" ondblclick="openApp('mycomputer', 'My Computer', './img/example.png')">
+      <img src="./img/example.png"> My Computer
     </div>
-    <div class="desktop-icon" ondblclick="openApp('paint', 'Paint', './img/Chess.png')">
-      <img src="./img/Chess.png"> MS Paint
+    <div class="desktop-icon" ondblclick="openApp('ie', 'Internet Explorer', './img/example.png')">
+      <img src="./img/example.png"> Internet Explorer
     </div>
-    <div class="desktop-icon" ondblclick="openApp('calc', 'Calculator', './img/My Computer.webp')">
-      <img src="./img/My Computer.webp"> Calculator
+    <div class="desktop-icon" ondblclick="openApp('mines', 'Minesweeper', './img/example.png')">
+      <img src="./img/example.png"> Minesweeper
     </div>
-    <div class="desktop-icon" ondblclick="openApp('ie', 'Internet Explorer', './img/Internet Explorer.png')">
-      <img src="./img/Internet Explorer.png"> Internet Explorer
-    </div>
-    <div class="desktop-icon" ondblclick="openApp('recycle', 'Recycle Bin', './img/Recycle Bin.png')">
-      <img src="./img/Recycle Bin.png"> Recycle Bin
+    <div class="desktop-icon" ondblclick="openApp('recycle', 'Recycle Bin', './img/example.png')">
+      <img src="./img/example.png"> Recycle Bin
     </div>
   </div>
 
@@ -176,17 +168,14 @@ XP-js!
   </div>
   <div style="display:flex; background:#fff; flex-grow:1; border: 1px solid #133f91;">
     <div style="width:50%; padding:10px;">
-        <div onclick="openApp('notepad', 'Notepad', './img/Text Document.png')" style="cursor:pointer; display:flex; align-items:center; gap:8px; margin-bottom:10px;">
-            <img src="./img/Text Document.png" width="30"> Notepad
+        <div onclick="openApp('notepad', 'Notepad', './img/example.png')" style="cursor:pointer; display:flex; align-items:center; gap:8px; margin-bottom:10px;">
+            <img src="./img/example.png" width="30"> Notepad
         </div>
-        <div onclick="openApp('paint', 'Paint', './img/Chess.png')" style="cursor:pointer; display:flex; align-items:center; gap:8px; margin-bottom:10px;">
-            <img src="./img/Chess.png" width="30"> Paint
+        <div onclick="openApp('calc', 'Calculator', './img/example.png')" style="cursor:pointer; display:flex; align-items:center; gap:8px; margin-bottom:10px;">
+            <img src="./img/example.png" width="30"> Calculator
         </div>
-        <div onclick="openApp('calc', 'Calculator', './img/My Computer.webp')" style="cursor:pointer; display:flex; align-items:center; gap:8px; margin-bottom:10px;">
-            <img src="./img/My Computer.webp" width="30"> Calculator
-        </div>
-        <div onclick="openApp('cmd', 'Command Prompt', './img/CMD.png')" style="cursor:pointer; display:flex; align-items:center; gap:8px;">
-            <img src="./img/CMD.png" width="30"> Command Prompt
+        <div onclick="openApp('cmd', 'Command Prompt', './img/example.png')" style="cursor:pointer; display:flex; align-items:center; gap:8px;">
+            <img src="./img/example.png" width="30"> Command Prompt
         </div>
     </div>
     <div style="width:50%; background:#dbeafe; padding:12px; border-left:1px solid #91b0df; color:#003399;">
@@ -288,34 +277,23 @@ XP-js!
 
     let content = '';
     if(id === 'cmd') {
+        win.style.width = "500px";
         content = `<div class="cmd-container" onclick="this.querySelector('input').focus()">
                     <div class="hist">Microsoft Windows XP [Version 5.1.2600]<br>(C) Copyright 1985-2001 Microsoft Corp.</div>
                     <div style="display:flex">C:\\> <input type="text" class="cmd-input" autofocus spellcheck="false"></div>
                    </div>`;
     } else if(id === 'notepad') {
-        content = `<div class="notepad-menu-bar"><span>File</span><span>Edit</span><span>Format</span><span>View</span><span>Help</span></div>
-                   <textarea class="notepad-area" spellcheck="false">Welcome to XP.js Notepad!</textarea>`;
-    } else if(id === 'paint') {
-        content = `<iframe src="https://jspaint.app" style="width:100%; height:450px; border:none;"></iframe>`;
-        win.style.width = "800px";
+        win.style.width = "600px"; win.style.height = "450px";
+        content = `<iframe class="app-frame" src="https://98.js.org/programs/notepad/"></iframe>`;
     } else if(id === 'calc') {
-        content = `<div class="calc-grid">
-                    <div class="calc-screen" id="calc-res">0</div>
-                    <button onclick="document.getElementById('calc-res').innerText='0'">C</button>
-                    <button onclick="calcIn('/')">/</button><button onclick="calcIn('*')">*</button><button onclick="calcIn('-')">-</button>
-                    <button onclick="calcIn('7')">7</button><button onclick="calcIn('8')">8</button><button onclick="calcIn('9')">9</button><button onclick="calcIn('+')">+</button>
-                    <button onclick="calcIn('4')">4</button><button onclick="calcIn('5')">5</button><button onclick="calcIn('6')">6</button><button onclick="calcRes()">=</button>
-                    <button onclick="calcIn('1')">1</button><button onclick="calcIn('2')">2</button><button onclick="calcIn('3')">3</button><button onclick="calcIn('0')">0</button>
-                   </div>`;
-        win.style.width = "250px";
+        win.style.width = "280px"; win.style.height = "350px";
+        content = `<iframe class="app-frame" src="https://98.js.org/programs/calculator/"></iframe>`;
+    } else if(id === 'mines') {
+        win.style.width = "300px"; win.style.height = "380px";
+        content = `<iframe class="app-frame" src="https://98.js.org/programs/minesweeper/"></iframe>`;
     } else if(id === 'ie') {
-        content = `<div style="padding:20px; background:white; color:black; display:flex; gap:15px; border-top:1px solid #716f64;">
-                    <img src="./img/Error.png" width="32">
-                    <div><strong>The page cannot be displayed</strong><br>The site you are looking for is currently unavailable.</div>
-                   </div>
-                   <div style="background:#ece9d8; padding:10px; text-align:right; border-top:1px solid #aca899;">
-                    <button style="width:70px" onclick="this.closest('.window').remove(); updateTaskbar();">Close</button>
-                   </div>`;
+        win.style.width = "850px"; win.style.height = "600px";
+        content = `<iframe class="app-frame" src="https://98.js.org/programs/explorer/index.html?address=https%3A%2F%2Fwww.google.com%2F"></iframe>`;
     } else {
         content = `<div style="padding:40px; background:white; text-align:center;">This folder is empty.</div>`;
     }
@@ -329,22 +307,13 @@ XP-js!
           <button aria-label="Close" onclick="event.stopPropagation(); this.closest('.window').remove(); updateTaskbar();"></button>
         </div>
       </div>
-      <div class="window-body" style="margin:0; padding:0; background:#ece9d8;">${content}</div>
+      <div class="window-body" style="margin:0; padding:0; flex-grow:1; display:flex; flex-direction:column; background:#ece9d8;">${content}</div>
     `;
 
     document.getElementById('window-layer').appendChild(win);
     if(id === 'cmd') initCMD(win);
     makeDraggable(win);
     updateTaskbar();
-  }
-
-  function calcIn(v) { 
-    let s = document.getElementById('calc-res'); 
-    if(s.innerText === '0') s.innerText = v; else s.innerText += v; 
-  }
-  function calcRes() { 
-    try { document.getElementById('calc-res').innerText = eval(document.getElementById('calc-res').innerText); } 
-    catch { document.getElementById('calc-res').innerText = 'Error'; } 
   }
 
   function updateTaskbar() {
